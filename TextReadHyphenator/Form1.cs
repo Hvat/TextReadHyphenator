@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,20 +15,18 @@ namespace TextReadHyphenator
 {
     public partial class MainForm : Form
     {
+        FileOper fileoper;
+
         public MainForm()
         {
             InitializeComponent();
 
-            richTextBox1.TextChanged += richTextBox1_TextChanged;
-            
+            fileoper = new FileOper();
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            var loader = new FilePatternsLoader("d:/repos/textreadhyphenator/nhyphenator/nhyphenator/resurses/hyph-ru.pat.txt",
-                "d:/repos/textreadhyphenator/nhyphenator/nhyphenator/resurses/hyph-ru.hyp.txt");
-            Hyphenator hypenator = new Hyphenator(loader);
-            richTextBox1.Text = hypenator.HyphenateText(richTextBox1.Text);
+            
         }
 
         private void новыйToolStripMenuItem_Click(object sender, EventArgs e)
@@ -45,8 +44,10 @@ namespace TextReadHyphenator
             open.Filter = "TXT Files|*.txt|RTF Files|*.rtf|HTML Files|*.html|All Files|*.*";
             if (open.ShowDialog() == DialogResult.OK)
             {
-                richTextBox1.LoadFile(open.FileName, RichTextBoxStreamType.PlainText);
-                Text = open.FileName;
+                richTextBox1.Text = fileoper.OpenFile(open.FileName);
+
+                //richTextBox1.LoadFile(open.FileName, RichTextBoxStreamType.PlainText);
+                //Text = open.FileName;
             }
         }
 
@@ -56,7 +57,7 @@ namespace TextReadHyphenator
             SaveFileDialog sav = new SaveFileDialog();
 
             sav.DefaultExt = "*.txt";
-            sav.Filter = "TXT Files|*.txt|RTF Files|*.rtf|HTML Files|*.html|All Files|*.*";
+            sav.Filter = "TXT Files|*.txt|RTF Files|*.rtf|OpenOffice XML Files|*.sxw|HTML Files|*.html";
             if (sav.ShowDialog() == DialogResult.OK && sav.FileName.Length > 0)
             {
                 richTextBox1.SaveFile(sav.FileName, RichTextBoxStreamType.PlainText);
@@ -102,11 +103,25 @@ namespace TextReadHyphenator
         private void шрифтToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Выбираем шрифт
-           
             if (fontDialog1.ShowDialog() == DialogResult.OK)
             {
                 richTextBox1.Font = fontDialog1.Font;
             }    
+        }
+
+        private void переносToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Применяем алгоритм переносов Френка Ляна
+            var loader = new FilePatternsLoader("d:/repos/textreadhyphenator/nhyphenator/nhyphenator/resurses/hyph-ru.pat.txt",
+                "d:/repos/textreadhyphenator/nhyphenator/nhyphenator/resurses/hyph-ru.hyp.txt");
+            Hyphenator hypenator = new Hyphenator(loader);
+            var text = hypenator.HyphenateText(richTextBox1.Text);
+
+            // Сохраняем полученный текст в формате HTML
+            fileoper.SaveFile(text);
+
+            // Загружаем в окно браузера
+            webBrowser1.Navigate("D:/Repos/TextReadHyphenator/TextReadHyphenator/Formatted_doc/Doc.html");
         }
     }
 }

@@ -12,7 +12,6 @@ namespace NHyphenator
     {
         private const char Marker = '.';
         private readonly bool _hyphenateLastWord;
-        private readonly bool _sortPatterns;
         private readonly string _hyphenateSymbol;
         private readonly int _minLetterCount;
         private readonly int _minWordLength;
@@ -28,19 +27,16 @@ namespace NHyphenator
         /// <param name="minWordLength">Минимальная длина слова для переноса</param>
         /// <param name="minLetterCount">Минимальное количество символов, оставшихся в строке</param>
         /// <param name="hyphenateLastWord">Переносить последнее слово, ПРИМЕЧАНИЕ: этот параметр работает, только если вводимый текст содержит более одного слова</param>
-        /// <param name="sortPatterns">Шаблоны сортировки перед использованием могут потребоваться для некоторых языков, таких как немецкий, португальский и т. д.</param>
         public Hyphenator(IHyphenatePatternsLoader loader,
             string hyphenateSymbol = "&shy;",
             int minWordLength = 5,
             int minLetterCount = 3,
-            bool hyphenateLastWord = false,
-            bool sortPatterns = false)
+            bool hyphenateLastWord = false)
         {
             _hyphenateSymbol = hyphenateSymbol;
             _minWordLength = minWordLength;
             _minLetterCount = minLetterCount >= 0 ? minLetterCount : 0;
             _hyphenateLastWord = hyphenateLastWord;
-            _sortPatterns = sortPatterns;
             LoadPatterns(loader);
         }
 
@@ -58,11 +54,6 @@ namespace NHyphenator
             _patterns = patternsString.Split(sep, StringSplitOptions.RemoveEmptyEntries)
                 .Select(CreatePattern)
                 .ToList();
-
-            if (_sortPatterns)
-            {
-                _patterns = _patterns.OrderBy(x => x).ToList();
-            }
 
             _exceptions = exceptionsString.Split(sep, StringSplitOptions.RemoveEmptyEntries)
                 .ToDictionary(x => x.Replace("-", ""), CreateHyphenateMaskFromExceptionString);
