@@ -17,11 +17,17 @@ namespace TextReadHyphenator
         public MainForm()
         {
             InitializeComponent();
+
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
+            
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-
+            var loader = new FilePatternsLoader("d:/repos/textreadhyphenator/nhyphenator/nhyphenator/resurses/hyph-ru.pat.txt",
+                "d:/repos/textreadhyphenator/nhyphenator/nhyphenator/resurses/hyph-ru.hyp.txt");
+            Hyphenator hypenator = new Hyphenator(loader);
+            richTextBox1.Text = hypenator.HyphenateText(richTextBox1.Text);
         }
 
         private void новыйToolStripMenuItem_Click(object sender, EventArgs e)
@@ -102,7 +108,5 @@ namespace TextReadHyphenator
                 richTextBox1.Font = fontDialog1.Font;
             }    
         }
-
-        
     }
 }

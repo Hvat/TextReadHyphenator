@@ -21,14 +21,14 @@ namespace NHyphenator
         private static readonly Regex CreateMaskRegex = new Regex(@"\w", RegexOptions.Compiled);
 
         /// <summary>
-        /// Implementation of Frank Liang's hyphenation algorithm
+        /// Реализация алгоритма расстановки переносов Фрэнка Ляна
         /// </summary>
-        /// <param name="loader">ILoader for load hyphenation patterns</param>
-        /// <param name="hyphenateSymbol">Symbol used for denote hyphenation</param>
-        /// <param name="minWordLength">Minimum word length for hyphenation word</param>
-        /// <param name="minLetterCount">Minimum number of characters left on line</param>
-        /// <param name="hyphenateLastWord">Hyphenate last word, NOTE: this option works only if input text contains more than one word</param>
-        /// <param name="sortPatterns">Sort patterns before using, can be needed for some languages like German, Portuguese, etc. </param>
+        /// <param name="loader">Загрузчик для загрузки шаблонов переносов</param>
+        /// <param name="hyphenateSymbol">Символ, используемый для обозначения переносов</param>
+        /// <param name="minWordLength">Минимальная длина слова для переноса</param>
+        /// <param name="minLetterCount">Минимальное количество символов, оставшихся в строке</param>
+        /// <param name="hyphenateLastWord">Переносить последнее слово, ПРИМЕЧАНИЕ: этот параметр работает, только если вводимый текст содержит более одного слова</param>
+        /// <param name="sortPatterns">Шаблоны сортировки перед использованием могут потребоваться для некоторых языков, таких как немецкий, португальский и т. д.</param>
         public Hyphenator(IHyphenatePatternsLoader loader,
             string hyphenateSymbol = "&shy;",
             int minWordLength = 5,
