@@ -89,6 +89,10 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Formatted_doc\Doc.html" />
+    <Content Include="Resurses\hyph-en-us.hyp.txt" />
+    <Content Include="Resurses\hyph-en-us.pat.txt" />
+    <Content Include="Resurses\hyph-ru.hyp.txt" />
+    <Content Include="Resurses\hyph-ru.pat.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

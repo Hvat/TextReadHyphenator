@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using NHyphenator;
 using NHyphenator.Loaders;
@@ -24,11 +16,6 @@ namespace TextReadHyphenator
             fileoper = new FileOper();
         }
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
         private void новыйToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Новый текст
@@ -41,13 +28,10 @@ namespace TextReadHyphenator
             OpenFileDialog open = new OpenFileDialog();
 
             open.DefaultExt = "*.txt";
-            open.Filter = "TXT Files|*.txt|RTF Files|*.rtf|HTML Files|*.html|All Files|*.*";
+            open.Filter = "TXT Files|*.txt|Microsoft Ofice Word|*.docx|HTML Files|*.html|All Files|*.*";
             if (open.ShowDialog() == DialogResult.OK)
             {
                 richTextBox1.Text = fileoper.OpenFile(open.FileName);
-
-                //richTextBox1.LoadFile(open.FileName, RichTextBoxStreamType.PlainText);
-                //Text = open.FileName;
             }
         }
 
@@ -57,10 +41,10 @@ namespace TextReadHyphenator
             SaveFileDialog sav = new SaveFileDialog();
 
             sav.DefaultExt = "*.txt";
-            sav.Filter = "TXT Files|*.txt|RTF Files|*.rtf|OpenOffice XML Files|*.sxw|HTML Files|*.html";
+            sav.Filter = "TXT Files|*.txt|Microsoft Ofice Word|*.docx|RTF Files|*.rtf|HTML Files|*.html";
             if (sav.ShowDialog() == DialogResult.OK && sav.FileName.Length > 0)
             {
-                richTextBox1.SaveFile(sav.FileName, RichTextBoxStreamType.PlainText);
+                fileoper.SaveFiles(sav.FileName, richTextBox1.Lines);
             }
         }
 
@@ -100,20 +84,20 @@ namespace TextReadHyphenator
             richTextBox1.SelectAll();
         }
 
-        private void шрифтToolStripMenuItem_Click(object sender, EventArgs e)
+        private void шрифтToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             // Выбираем шрифт
             if (fontDialog1.ShowDialog() == DialogResult.OK)
             {
                 richTextBox1.Font = fontDialog1.Font;
-            }    
+            }
         }
 
-        private void переносToolStripMenuItem_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             // Применяем алгоритм переносов Френка Ляна
-            var loader = new FilePatternsLoader("d:/repos/textreadhyphenator/nhyphenator/nhyphenator/resurses/hyph-ru.pat.txt",
-                "d:/repos/textreadhyphenator/nhyphenator/nhyphenator/resurses/hyph-ru.hyp.txt");
+            var loader = new FilePatternsLoader("../../resurses/hyph-ru.pat.txt",
+                "../../resurses/hyph-ru.hyp.txt");
             Hyphenator hypenator = new Hyphenator(loader);
             var text = hypenator.HyphenateText(richTextBox1.Text);
 
@@ -122,6 +106,8 @@ namespace TextReadHyphenator
 
             // Загружаем в окно браузера
             webBrowser1.Navigate("D:/Repos/TextReadHyphenator/TextReadHyphenator/Formatted_doc/Doc.html");
+
+            MessageBox.Show("Операция выполнена. Перейдите на вкладку 'Браузер'");
         }
     }
 }

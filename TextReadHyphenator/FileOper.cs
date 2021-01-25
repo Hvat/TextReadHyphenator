@@ -37,5 +37,19 @@ namespace TextReadHyphenator
                 sw.WriteLine(lines);
             }
         }
+
+        public void SaveFiles(string filePath, string[] lines)
+        {
+            FilePath = filePath;
+            Stream st = File.Open(FilePath, FileMode.OpenOrCreate, FileAccess.Write);
+
+            using (StreamWriter sw = new StreamWriter(st, Encoding.Default))
+            {
+                foreach (string line in lines)
+                {
+                    sw.WriteLine(line);
+                }
+            }
+        }
     }
 }
