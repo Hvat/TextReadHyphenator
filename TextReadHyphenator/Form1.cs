@@ -101,7 +101,7 @@ namespace TextReadHyphenator
             Hyphenator hypenator = new Hyphenator(loader);
             var text = hypenator.HyphenateText(richTextBox1.Text);
 
-            // Сохраняем полученный текст в формате HTML
+            //Сохраняем полученный текст в формате HTML
             fileoper.SaveFile(text);
 
             // Загружаем в окно браузера
